@@ -13,6 +13,7 @@ const buildTimeEnv: Record<string, string> = Object.fromEntries(
     .filter(([k]) => k.startsWith('VITE_'))
     .map(([k, v]) => [k, String(v)])
 )
+// test
 
 // Runtime vars injected by entrypoint.sh via /env-config.js -> window.__ENV__
 const runtimeEnv: Record<string, string> = window.__ENV__ ?? {}
