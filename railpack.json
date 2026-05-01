@@ -4,12 +4,8 @@
   "packages": {
     "node": "20"
   },
+  "secrets": ["*"],
   "steps": {
-    "build": {
-      "inputs": [{ "step": "install" }, { "local": true }],
-      "secrets": ["*"],
-      "commands": ["npm run build"]
-    },
     "runtime": {
       "inputs": [{ "image": "nginx:1.27-alpine" }],
       "commands": [
