@@ -35,4 +35,4 @@ cat "${DIST}/env-config.js"
 
 
 echo "Starting nginx..."
-exec nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
+exec /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
