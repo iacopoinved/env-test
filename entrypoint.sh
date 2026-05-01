@@ -59,4 +59,6 @@ http {
 }
 NGINXEOF
 
-exec nginx -g 'daemon off;' -c /tmp/nginx.conf
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+echo "nginx binary: $(which nginx 2>/dev/null || echo NOT FOUND, trying /usr/sbin/nginx)"
+exec /usr/sbin/nginx -g 'daemon off;' -c /tmp/nginx.conf
