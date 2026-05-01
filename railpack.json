@@ -7,13 +7,7 @@
   "secrets": [
     "VITE_TEST_BUILDTIME",
     "VITE_TEST_RUNTIME",
-    "VITE_APP_URL",
-    "VITE_GOOGLE_MAPS_API_KEY",
-    "VITE_TYPEFORM_URL",
-    "VITE_TYPEFORM_ID",
-    "VITE_APP_SUPERADMIN_EMAIL",
-    "VITE_HOCUSPOCUS_TOKEN",
-    "VITE_HOCUSPOCUS_CLIENT_TOKEN"
+    "VITE_APP_URL"
   ],
   "steps": {
     "build": {
