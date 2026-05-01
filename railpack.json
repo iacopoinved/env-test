@@ -4,10 +4,27 @@
   "packages": {
     "node": "20"
   },
+  "secrets": [
+    "VITE_TEST_BUILDTIME",
+    "VITE_TEST_RUNTIME",
+    "VITE_APP_URL",
+    "VITE_GOOGLE_MAPS_API_KEY",
+    "VITE_TYPEFORM_URL",
+    "VITE_TYPEFORM_ID",
+    "VITE_APP_SUPERADMIN_EMAIL",
+    "VITE_HOCUSPOCUS_TOKEN",
+    "VITE_HOCUSPOCUS_CLIENT_TOKEN"
+  ],
   "steps": {
+    "build": {
+      "inputs": [{ "step": "install" }],
+      "secrets": ["*"],
+      "commands": ["npm run build"]
+    },
     "runtime": {
       "inputs": [{ "image": "nginx:1.27-alpine" }],
       "commands": [
+        "apk add --no-cache dumb-init",
         "mkdir -p /var/log/nginx /var/run /etc/nginx /app",
         { "src": "nginx.conf", "dest": "/etc/nginx/nginx.conf" },
         { "src": "entrypoint.sh", "dest": "/app/entrypoint.sh" },
@@ -16,11 +33,8 @@
     }
   },
   "deploy": {
-    "base": { "image": "nginx:1.27-alpine" },
-    "inputs": [
-      { "step": "runtime", "include": ["/etc/nginx/nginx.conf", "/app/entrypoint.sh"] },
-      { "step": "build", "include": ["/app/dist"] }
-    ],
-    "startCommand": "/bin/sh /app/entrypoint.sh"
+    "base": { "step": "runtime" },
+    "inputs": [{ "step": "build", "include": ["/app/dist"] }],
+    "startCommand": "dumb-init /app/entrypoint.sh"
   }
 }
