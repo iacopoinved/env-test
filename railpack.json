@@ -38,6 +38,6 @@
   "deploy": {
     "base": { "step": "runtime" },
     "inputs": [{ "step": "build", "include": ["/app/dist"] }],
-    "startCommand": "dumb-init /app/entrypoint.sh"
+    "startCommand": "/bin/sh /app/entrypoint.sh"
   }
 }
