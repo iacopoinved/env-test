@@ -11,9 +11,18 @@
   ],
   "steps": {
     "build": {
-      "inputs": [{ "step": "install" }, { "local": true }],
-      "secrets": ["*"],
-      "commands": ["npm run build"]
+      "inputs": [{ "step": "install" }],
+      "secrets": ["VITE_TEST_BUILDTIME", "VITE_TEST_RUNTIME", "VITE_APP_URL"],
+      "commands": [
+        { "src": "src", "dest": "src" },
+        { "src": "public", "dest": "public" },
+        { "src": "index.html", "dest": "index.html" },
+        { "src": "tsconfig.json", "dest": "tsconfig.json" },
+        { "src": "tsconfig.app.json", "dest": "tsconfig.app.json" },
+        { "src": "tsconfig.node.json", "dest": "tsconfig.node.json" },
+        { "src": "vite.config.ts", "dest": "vite.config.ts" },
+        "npm run build"
+      ]
     },
     "runtime": {
       "inputs": [{ "image": "nginx:1.27-alpine" }],
