@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "provider": "node",
+  "packages": {
+    "node": "20"
+  },
+  "steps": {
+    "install": {
+      "commands": [
+        "npm ci"
+      ]
+    },
+    "build": {
+      "inputs": [{ "step": "install" }],
+      "secrets": ["*"],
+      "commands": ["npm run build"]
+    },
+    "runtime": {
+      "inputs": [{ "image": "nginx:1.27-alpine" }],
+      "commands": [
+        "apk add --no-cache dumb-init",
+        "mkdir -p /var/log/nginx /var/run /etc/nginx /app",
+        { "src": "nginx.conf", "dest": "/etc/nginx/nginx.conf" },
+        { "src": "entrypoint.sh", "dest": "/app/entrypoint.sh" },
+        "chmod +x /app/entrypoint.sh"
+      ]
+    }
+  },
+  "deploy": {
+    "base": { "step": "runtime" },
+    "inputs": [{ "step": "build", "include": ["/app/dist"] }],
+    "startCommand": "dumb-init /app/entrypoint.sh"
+  }
+}
