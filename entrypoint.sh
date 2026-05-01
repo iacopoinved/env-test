@@ -33,8 +33,6 @@ EOF
 echo "env-config.js written:"
 cat "${DIST}/env-config.js"
 
-echo "Testing nginx config..."
-nginx -t -c /etc/nginx/nginx.conf
 
 echo "Starting nginx..."
 exec nginx -g 'daemon off;' -c /etc/nginx/nginx.conf

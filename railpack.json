@@ -8,7 +8,6 @@
     "runtime": {
       "inputs": [{ "image": "nginx:1.27-alpine" }],
       "commands": [
-        "apk add --no-cache dumb-init",
         "mkdir -p /var/log/nginx /var/run /etc/nginx /app",
         { "src": "nginx.conf", "dest": "/etc/nginx/nginx.conf" },
         { "src": "entrypoint.sh", "dest": "/app/entrypoint.sh" },
@@ -19,6 +18,6 @@
   "deploy": {
     "base": { "step": "runtime" },
     "inputs": [{ "step": "build", "include": ["/app/dist"] }],
-    "startCommand": "dumb-init /app/entrypoint.sh"
+    "startCommand": "/bin/sh /app/entrypoint.sh"
   }
 }
