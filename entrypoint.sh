@@ -21,12 +21,6 @@ window.__ENV__ = {
   VITE_TEST_BUILDTIME: "${VITE_TEST_BUILDTIME:-}",
   VITE_TEST_RUNTIME: "${VITE_TEST_RUNTIME:-}",
   VITE_APP_URL: "${VITE_APP_URL:-}",
-  VITE_GOOGLE_MAPS_API_KEY: "${VITE_GOOGLE_MAPS_API_KEY:-}",
-  VITE_TYPEFORM_URL: "${VITE_TYPEFORM_URL:-}",
-  VITE_TYPEFORM_ID: "${VITE_TYPEFORM_ID:-}",
-  VITE_APP_SUPERADMIN_EMAIL: "${VITE_APP_SUPERADMIN_EMAIL:-}",
-  VITE_HOCUSPOCUS_TOKEN: "${VITE_HOCUSPOCUS_TOKEN:-}",
-  VITE_HOCUSPOCUS_CLIENT_TOKEN: "${VITE_HOCUSPOCUS_CLIENT_TOKEN:-}",
 };
 EOF
 
@@ -34,7 +28,35 @@ echo "env-config.js written:"
 cat "${DIST}/env-config.js"
 
 
-echo "Starting nginx on port ${PORT:-8080}..."
-# Substitute $PORT in nginx.conf (nginx doesn't support env vars natively)
-envsubst '${PORT}' < /etc/nginx/nginx.conf > /tmp/nginx.conf
-exec /usr/sbin/nginx -g 'daemon off;' -c /tmp/nginx.conf
+PORT=${PORT:-8080}
+echo "Starting nginx on port ${PORT}..."
+
+# Write nginx config inline so we don't depend on the file being copied
+mkdir -p /var/log/nginx /var/run
+cat > /tmp/nginx.conf << NGINXEOF
+worker_processes auto;
+error_log /var/log/nginx/error.log warn;
+pid /var/run/nginx.pid;
+events { worker_connections 1024; }
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/javascript;
+    server {
+        listen ${PORT};
+        root /app/dist;
+        index index.html;
+        location = /env-config.js {
+            add_header Cache-Control "no-store, no-cache, must-revalidate";
+        }
+        location / {
+            try_files \$uri \$uri/ /index.html;
+            add_header Cache-Control "no-store";
+        }
+    }
+}
+NGINXEOF
+
+exec nginx -g 'daemon off;' -c /tmp/nginx.conf

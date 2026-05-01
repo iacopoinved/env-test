@@ -29,7 +29,6 @@
       "commands": [
         "apk add --no-cache dumb-init",
         "mkdir -p /var/log/nginx /var/run /etc/nginx /app",
-        { "src": "nginx.conf", "dest": "/etc/nginx/nginx.conf" },
         { "src": "entrypoint.sh", "dest": "/app/entrypoint.sh" },
         "chmod +x /app/entrypoint.sh"
       ]
