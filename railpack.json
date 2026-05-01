@@ -6,7 +6,7 @@
   },
   "steps": {
     "build": {
-      "inputs": [{ "step": "install" }],
+      "inputs": [{ "step": "install" }, { "local": true }],
       "secrets": ["*"],
       "commands": ["npm run build"]
     },
