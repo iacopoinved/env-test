@@ -16,8 +16,11 @@
     }
   },
   "deploy": {
-    "base": { "step": "runtime" },
-    "inputs": [{ "step": "build", "include": ["/app/dist"] }],
+    "base": { "image": "nginx:1.27-alpine" },
+    "inputs": [
+      { "step": "runtime", "include": ["/etc/nginx/nginx.conf", "/app/entrypoint.sh"] },
+      { "step": "build", "include": ["/app/dist"] }
+    ],
     "startCommand": "/bin/sh /app/entrypoint.sh"
   }
 }
