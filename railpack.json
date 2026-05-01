@@ -4,7 +4,6 @@
   "packages": {
     "node": "20"
   },
-  "secrets": ["*"],
   "steps": {
     "runtime": {
       "inputs": [{ "image": "nginx:1.27-alpine" }],
