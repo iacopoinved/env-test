@@ -34,5 +34,7 @@ echo "env-config.js written:"
 cat "${DIST}/env-config.js"
 
 
-echo "Starting nginx..."
-exec /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
+echo "Starting nginx on port ${PORT:-8080}..."
+# Substitute $PORT in nginx.conf (nginx doesn't support env vars natively)
+envsubst '${PORT}' < /etc/nginx/nginx.conf > /tmp/nginx.conf
+exec /usr/sbin/nginx -g 'daemon off;' -c /tmp/nginx.conf
